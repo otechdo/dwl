@@ -1,82 +1,181 @@
-use std::{
-    env::args,
-    fs,
-    path::Path,
-    process::{exit, Command, ExitCode},
-};
-
+use inquire::{prompt_confirmation, MultiSelect, Select, Text};
 use notifme::Notification;
+use std::fs;
+use std::path::Path;
+use std::process::{exit, Command, ExitCode};
 
-///
-/// adazaz
-///
-fn main() -> ExitCode {
-    let args: Vec<String> = args().collect();
-
-    let p: String = format!("{}/.icons", env!("HOME"));
-    let f: String = format!("{p}/spot_dwl.png");
-
-    if !Path::new(p.as_str()).is_dir() {
-        fs::create_dir(&p).expect("Fail to create the icons directory");
+fn ask(p: &str) -> String {
+    loop {
+        let data: String = Text::new(p).prompt().unwrap();
+        if data.is_empty() {
+            continue;
+        }
+        return data;
     }
+}
+fn capture(p: &mut Vec<String>, provider: &str) -> Vec<String> {
+    loop {
+        p.push(ask(format!("Please enter the {provider} url : ").as_str()));
+        match prompt_confirmation("Download ? : ") {
+            Ok(true) => {
+                return p.to_vec();
+            }
+            Ok(false) | Err(_) => {
+                continue;
+            }
+        }
+    }
+}
+fn check(codec: &str) {
+    let p = format!("{}/Cd's/{codec}", env!("HOME"));
+    if !Path::new(p.as_str()).exists() {
+        fs::create_dir(p.as_str()).expect("Failed to create codec directory");
+    }
+}
 
-    if !Path::new(f.as_str()).is_file() {
-        assert!(Command::new("wget")
-            .arg("https://raw.githubusercontent.com/taishingi/spot_dwl/master/icons/spot_dwl.png")
-            .arg("-q")
+fn youtube(songs: &mut Vec<String>, codecs: &mut [&str], bitrate: &str) {
+    for codec in codecs {
+        check(codec);
+        let l = songs.len();
+        if l.gt(&1) {
+            assert!(Notification::new()
+                .app("spot_dwl")
+                .summary("Spotify Downloader")
+                .body(format!("Started to download {l} queries from youtube").as_str())
+                .icon("spot_dwl")
+                .send());
+        } else {
+            assert!(Notification::new()
+                .app("spot_dwl")
+                .summary("Spotify Downloader")
+                .body(format!("Started to download {l} query from youtube").as_str())
+                .icon("spot_dwl")
+                .send());
+        }
+        assert!(Command::new("yt-dlp")
+            .arg("--ignore-config")
+            .arg("--extractor-args")
+            .arg("youtubetab:skip=authcheck")
+            .arg("--extract-audio")
+            .arg("--no-config-locations")
+            .arg("--break-on-existing")
+            .arg("--write-thumbnail")
+            .arg("--cookies")
+            .arg(format!("{}/Cd's/cookies.txt", env!("HOME")).as_str())
+            .arg("--no-sponsorblock")
+            .arg("--audio-quality")
+            .arg(bitrate)
+            .arg("--audio-format")
+            .arg(codec.to_string())
+            .arg("--output")
+            .arg(format!("{}/Cd's/{codec}/{}", env!("HOME"),"%(playlist)s/%(title)s.%(ext)s").as_str())
+            .arg("--keep-video") 
+            .args(&mut *songs)
             .spawn()
-            .expect("failed to get icon")
+            .expect("yt-dlp not founded")
             .wait()
             .expect("msg")
             .success());
-        assert!(fs::copy("spot_dwl.png", f.as_str()).is_ok());
-        assert!(fs::remove_file("spot_dwl.png").is_ok());
     }
-    if args.len() == 1 {
-        println!("missing query");
-        exit(1);
-    }
-    let l = args.len() - 1;
-    assert!(Notification::new()
-        .summary("Spotify Downloader")
-        .body(format!("Started to download {l} query").as_str())
-        .icon("spot_dwl")
-        .send());
-    for (x, item) in args.iter().enumerate().skip(1) {
-        assert!(Command::new("clear")
-            .spawn()
-            .expect("windows")
-            .wait()
-            .expect("msg")
-            .success());
+}
+
+fn spotify(songs: &mut [String], codecs: &mut [&str], bitrate: &str) {
+    for codec in codecs {
+        check(codec);
         assert!(Command::new("spotdl")
-            .arg("--config")
-            .arg(item.as_str())
+            .arg("--audio")
+            .arg("youtube-music")
+            .arg("youtube")
+            .arg("soundcloud")
+            .arg("--headless")
+            .arg("--bitrate")
+            .arg(bitrate)
+            .arg("--format")
+            .arg(codec.to_string().as_str())
+            .arg("--preload")
+            .arg("--output")
+            .arg(
+                format!(
+                    "{}/Cd's/{}/{}",
+                    env!("HOME"),
+                    codec,
+                    "{artist}/{albums}/{title}.{output-ext}"
+                )
+                .as_str()
+            )
+            .arg("--cookie-file")
+            .arg(format!("{}/Cd's/cookies.txt", env!("HOME")).as_str())
+            .arg("download")
+            .args(&mut *songs)
             .spawn()
             .expect("spotdl not founded")
             .wait()
             .expect("msg")
             .success());
+    }
+}
+fn main() -> ExitCode {
+    if !Path::new(format!("{}/Cd's", env!("HOME")).as_str()).exists() {
+        fs::create_dir(format!("{}/Cd's", env!("HOME")).as_str())
+            .expect("Failed to create Cd's directory")
+    }
+    let mut provider = String::new();
+    let mut bitrate = String::new();
+    let mut codecs: Vec<&str> = Vec::new();
+    let mut musics: Vec<String> = Vec::new();
+    loop {
+        let p = Select::new("Select a provider : ", vec!["youtube", "spotify"])
+            .prompt()
+            .unwrap();
+        if !p.is_empty() {
+            provider.clear();
+            provider.push_str(p);
+            break;
+        } else {
+            continue;
+        }
+    }
+    loop {
+        let c: Vec<&str> = MultiSelect::new(
+            "Select codecs : ",
+            vec![
+                "mp3", "flac", "ogg", "opus", "m4a", "wav", "alac", "aac", "vorbis",
+            ],
+        )
+        .prompt()
+        .unwrap();
 
-        assert!(Notification::new()
-            .summary("Spotify Downloader")
-            .body(format!("Query {x}/{l} downloaded successfully").as_str())
-            .icon("spot_dwl")
-            .send());
+        if !c.is_empty() {
+            codecs.clear();
+            codecs = c;
+            break;
+        } else {
+            continue;
+        }
+    }
+    loop {
+        let b: &str = Select::new(
+            "Select a bitrate : ",
+            vec![
+                "auto", "disable", "8k", "16k", "24k", "32k", "40k", "48k", "64k", "80k", "96k",
+                "112k", "128k", "160k", "192k", "224k", "256k", "320k",
+            ],
+        )
+        .prompt()
+        .unwrap();
+        if !b.is_empty() {
+            bitrate.clear();
+            bitrate.push_str(b);
+            break;
+        } else {
+            continue;
+        }
     }
 
-    if l >= 2 {
-        assert!(Notification::new()
-            .summary("Spotify Downloader")
-            .body(format!("Finnish to downloaded {l} queries").as_str())
-            .icon("spot_dwl")
-            .send());
+    if provider.eq("spotify") {
+        spotify(&mut capture(&mut musics, "spotify"), &mut codecs, &bitrate);
     } else {
-        assert!(Notification::new()
-            .summary("Spotify Downloader")
-            .body(format!("Finnish to downloaded {l} query").as_str())
-            .icon("spot_dwl")
-            .send());
+        youtube(&mut capture(&mut musics, "youtube"), &mut codecs, &bitrate);
     }
 
     exit(0);
