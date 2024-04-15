@@ -33,7 +33,6 @@ spotdl --generate-config
 
 The config file is located ~/.spotdl/config.json under linux.
 
-
 ```json
 {
   "client_id": "5f573c9620494bae87890c0f08a60293",
@@ -109,4 +108,8 @@ install -m 644 icons/dwl.svg /usr/share/icons
 dwl
 ```
 
-All song url start with https://open.spotify.com
+## Song destinations
+
+All songs will be downloaded in ~/Records directory
+
+
