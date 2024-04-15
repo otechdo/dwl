@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/otechdo/dwl/master/icons/dwl.svg" alt="dwl" style="zoom: 50%;" />
+<img src="https://raw.githubusercontent.com/otechdo/dwl/master/icons/dwl.svg" alt="dwl" style="zoom: 50%;align=center" />
 
 
 
