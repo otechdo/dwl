@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/otechdo/dwl/master/icons/dwl.svg" alt="dwl" style="zoom: 50%;align=center" />
-
-
+<p align="center">
+<a href="https://github.com/otechdo/dwl" title="source code" target ="_blank">  <img src="https://raw.githubusercontent.com/otechdo/dwl/master/icons/dwl.svg" alt="dwl" style="zoom: 50%;" width="250" /></a>
+</p>
 
 ## I
 Spotify premium is required
