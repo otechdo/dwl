@@ -96,7 +96,7 @@ cargo install spot_dwl
 ### From GitHub
 
 ```bash
-install -m 644 desktop/dwl.desktop /usr/share/applications
+git clone https://github.com/otechdo/dwl.git && cd dwl && cargo build --release
 install -m 755 target/release/dwl /usr/bin
 install -m 644 desktop/dwl.desktop /usr/share/applications
 install -m 644 icons/dwl.svg /usr/share/icons
@@ -107,6 +107,7 @@ install -m 644 icons/dwl.svg /usr/share/icons
 ```bash
 dwl
 ```
+
 
 ## Song destinations
 
