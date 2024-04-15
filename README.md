@@ -1,9 +1,11 @@
-# spot_dwl
+<img src="https://raw.githubusercontent.com/otechdo/dwl/master/icons/dwl.svg" alt="dwl" style="zoom: 50%;" />
 
-A music downloader from youtube using spotify 
+
 
 ## I
 Spotify premium is required
+
+YouTube premium is required
 
 ## II
 
@@ -12,7 +14,7 @@ Install libnotify, pip, ffmpeg, on your system.
 ## III
 
 ```bash
-sudo pip3 install spotdl 
+sudo -H pip install --upgrade youtube-dl spotdl
 ```
 
 ## IV
@@ -87,14 +89,24 @@ The config file is located ~/.spotdl/config.json under linux.
 
 ## Installation
 
+### From Crates.io
 ```bash
 cargo install spot_dwl
+```
+
+### From GitHub
+
+```bash
+install -m 644 desktop/dwl.desktop /usr/share/applications
+install -m 755 target/release/dwl /usr/bin
+install -m 644 desktop/dwl.desktop /usr/share/applications
+install -m 644 icons/dwl.svg /usr/share/icons
 ```
 
 ## Usage
 
 ```bash
-spot_dwl "song-url" "song url" ...
+dwl
 ```
- 
+
 All song url start with https://open.spotify.com

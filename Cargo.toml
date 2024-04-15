@@ -1,13 +1,13 @@
 [package]
 name = "dwl"
-version = "1.1.0"
+version = "2.0.0"
 edition = "2021"
 license-file = "LICENSE"
-description = "A simple helper to download songs from spotify using spotdl"
+description = "A helper to download video and songs"
 readme = "README.md"
-repository = "https://github.com/taishingi/spot_dwl.git"
+repository = "https://github.com/otechdo/dwl.git"
 authors = ["Willy Micieli"]
-keywords = ["spotify", "downloader", "music"]
+keywords = ["spotify", "youtube","videos", "downloader", "music"]
 categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
