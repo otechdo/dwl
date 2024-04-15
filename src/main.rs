@@ -99,7 +99,7 @@ fn spotify(songs: &mut [String], codecs: &mut [&str], bitrate: &str) {
                     "{}/Records/{}/{}",
                     env!("HOME"),
                     codec,
-                    "{artist}/{albums}/{title}.{output-ext}"
+                    "{artist}/{album}/{title}.{output-ext}"
                 )
                 .as_str()
             )
