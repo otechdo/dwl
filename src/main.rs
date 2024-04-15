@@ -66,7 +66,7 @@ fn youtube(songs: &mut Vec<String>, codecs: &mut [&str], bitrate: &str) {
             .arg("--audio-quality")
             .arg(bitrate)
             .arg("--audio-format")
-            .arg(codec.to_string())
+            .arg(&codec)
             .arg("--output")
             .arg(format!("{}/Records/{codec}/{}", env!("HOME"),"%(playlist)s/%(title)s.%(ext)s").as_str())
             .arg("--keep-video") 
