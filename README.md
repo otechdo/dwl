@@ -112,4 +112,7 @@ dwl
 
 All songs will be downloaded in ~/Records directory
 
+~/Records/cookies.txt must be exists for download with youtube cookies.
+
+[Extension](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)
 

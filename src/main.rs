@@ -27,7 +27,7 @@ fn capture(p: &mut Vec<String>, provider: &str) -> Vec<String> {
     }
 }
 fn check(codec: &str) {
-    let p = format!("{}/Cd's/{codec}", env!("HOME"));
+    let p = format!("{}/Records/{codec}", env!("HOME"));
     if !Path::new(p.as_str()).exists() {
         fs::create_dir(p.as_str()).expect("Failed to create codec directory");
     }
@@ -61,14 +61,14 @@ fn youtube(songs: &mut Vec<String>, codecs: &mut [&str], bitrate: &str) {
             .arg("--break-on-existing")
             .arg("--write-thumbnail")
             .arg("--cookies")
-            .arg(format!("{}/Cd's/cookies.txt", env!("HOME")).as_str())
+            .arg(format!("{}/Records/cookies.txt", env!("HOME")).as_str())
             .arg("--no-sponsorblock")
             .arg("--audio-quality")
             .arg(bitrate)
             .arg("--audio-format")
             .arg(codec.to_string())
             .arg("--output")
-            .arg(format!("{}/Cd's/{codec}/{}", env!("HOME"),"%(playlist)s/%(title)s.%(ext)s").as_str())
+            .arg(format!("{}/Records/{codec}/{}", env!("HOME"),"%(playlist)s/%(title)s.%(ext)s").as_str())
             .arg("--keep-video") 
             .args(&mut *songs)
             .spawn()
@@ -96,7 +96,7 @@ fn spotify(songs: &mut [String], codecs: &mut [&str], bitrate: &str) {
             .arg("--output")
             .arg(
                 format!(
-                    "{}/Cd's/{}/{}",
+                    "{}/Records/{}/{}",
                     env!("HOME"),
                     codec,
                     "{artist}/{albums}/{title}.{output-ext}"
@@ -104,7 +104,7 @@ fn spotify(songs: &mut [String], codecs: &mut [&str], bitrate: &str) {
                 .as_str()
             )
             .arg("--cookie-file")
-            .arg(format!("{}/Cd's/cookies.txt", env!("HOME")).as_str())
+            .arg(format!("{}/Records/cookies.txt", env!("HOME")).as_str())
             .arg("download")
             .args(&mut *songs)
             .spawn()
@@ -115,9 +115,9 @@ fn spotify(songs: &mut [String], codecs: &mut [&str], bitrate: &str) {
     }
 }
 fn main() -> ExitCode {
-    if !Path::new(format!("{}/Cd's", env!("HOME")).as_str()).exists() {
-        fs::create_dir(format!("{}/Cd's", env!("HOME")).as_str())
-            .expect("Failed to create Cd's directory")
+    if !Path::new(format!("{}/Records", env!("HOME")).as_str()).exists() {
+        fs::create_dir(format!("{}/Records", env!("HOME")).as_str())
+            .expect("Failed to create Records directory")
     }
     let mut provider = String::new();
     let mut bitrate = String::new();
