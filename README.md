@@ -31,7 +31,7 @@ spotdl --download-ffmpeg
 ### From Crates.io
 
 ```bash
-cargo install spot_dwl
+cargo install dwl
 ```
 
 ### From GitHub
