@@ -49,12 +49,91 @@ install -m 644 icons/dwl.svg /usr/share/icons
 dwl
 ```
 
+### Show dwl errors 
 
-## Song destinations
+```bash
+watch /tmp/dwl-stderr
+```
 
-All songs will be downloaded in ~/Records directory
+### Show dwl ouptut 
 
-~/Records/cookies.txt must be exists for download with youtube cookies.
+```bash
+watch /tmp/dwl-stdout
+```
+
+
+## For opus file
 
 [Extension](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)
 
+
+```json
+{
+    "client_id": "",
+    "client_secret": "",
+    "auth_token": null,
+    "user_auth": false,
+    "headless": true,
+    "cache_path": "/home/otechdo/.spotdl/.spotipy",
+    "no_cache": false,
+    "max_retries": 3,
+    "use_cache_file": false,
+    "audio_providers": [
+        "youtube-music"
+    ],
+    "lyrics_providers": [
+        "genius",
+        "azlyrics",
+        "musixmatch"
+    ],
+    "playlist_numbering": false,
+    "scan_for_songs": false,
+    "m3u": null,
+    "output": "/home/otechdo/Music/{artist}/{album}/{title}.{output-ext}",
+    "overwrite": "skip",
+    "search_query": null,
+    "ffmpeg": "ffmpeg",
+    "bitrate": null,
+    "ffmpeg_args": null,
+    "format": "opus",
+    "save_file": null,
+    "filter_results": true,
+    "album_type": null,
+    "threads": 4,
+    "cookie_file": "/home/otechdo/.cookies.txt",
+    "restrict": null,
+    "print_errors": false,
+    "sponsor_block": false,
+    "preload": true,
+    "archive": null,
+    "load_config": true,
+    "log_level": "INFO",
+    "simple_tui": false,
+    "fetch_albums": false,
+    "id3_separator": "/",
+    "ytm_data": false,
+    "add_unavailable": false,
+    "generate_lrc": false,
+    "force_update_metadata": false,
+    "only_verified_results": false,
+    "sync_without_deleting": false,
+    "max_filename_length": null,
+    "yt_dlp_args": null,
+    "detect_formats": null,
+    "save_errors": null,
+    "ignore_albums": null,
+    "proxy": null,
+    "skip_explicit": false,
+    "log_format": null,
+    "redownload": false,
+    "skip_album_art": false,
+    "create_skip_file": false,
+    "respect_skip_file": false,
+    "web_use_output_dir": false,
+    "port": 8800,
+    "host": "localhost",
+    "keep_alive": false,
+    "allowed_origins": null,
+    "keep_sessions": false
+}
+```
