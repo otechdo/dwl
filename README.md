@@ -59,24 +59,21 @@ install -m 644 icons/dwl.svg /usr/share/icons
 dwl
 ```
 
-## Show dwl errors 
+>  Show dwl errors 
 
 ```bash
 watch -n 1 tail -n 5 /tmp/dwl-stderr
 ```
 
-## Show dwl ouptut 
+> Show dwl ouptut 
 
 ```bash
 watch -n 1 tail -n 5 /tmp/dwl-stdout
 ```
 
-
-## For opus file
+## Config
 
 [Extension](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)
-
-## My config 
 
 ```json
 {
