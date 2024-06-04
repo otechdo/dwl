@@ -40,13 +40,10 @@ fn download(song: &str) -> i32 {
         assert!(remove_file("/tmp/dwl-stderr").is_ok());
     }
 
-    assert!(File::create("/tmp/dwl-stdout").is_ok());
-    assert!(File::create("/tmp/dwl-stderr").is_ok());
-    let o: File = File::open("/tmp/dwl-stdout").expect("/tmp/dwl-stdout not exist");
-    let e: File = File::open("/tmp/dwl-stderr").expect("/tmp/dwl-stderr not exist");
+    let e: File = File::create("/tmp/dwl-stderr").expect("msg");
+    let o: File = File::create("/tmp/dwl-stdout").expect("msg");
     let _ = Command::new("spotdl")
         .arg(song)
-        .current_dir("/tmp")
         .stdout(o)
         .stderr(e)
         .spawn()
@@ -62,7 +59,7 @@ fn main() {
     capture(&mut musics);
     let pb: ProgressBar = ProgressBar::new(musics.len() as u64);
     pb.set_style(
-        ProgressStyle::with_template("{spinner:.white} [{bar:80.white}] {msg}")
+        ProgressStyle::with_template("{spinner:.white} [ {percent}% ] [{bar:80.white}] {msg}")
             .expect("aaaa")
             .progress_chars("=-"),
     );

@@ -17,10 +17,20 @@ Install libnotify, pip, ffmpeg, on your system.
 ## III
 
 ```bash
-sudo -H pip install --upgrade youtube-dl spotdl
+pipx install spotdl 
 ```
 
-## IV
+## IV 
+
+```bash
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+```
+
+```shell
+set -x PATH "$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+```
+
+## V
 
 ```bash
 spotdl --download-ffmpeg
@@ -49,16 +59,16 @@ install -m 644 icons/dwl.svg /usr/share/icons
 dwl
 ```
 
-### Show dwl errors 
+## Show dwl errors 
 
 ```bash
-watch /tmp/dwl-stderr
+watch -n 1 tail -n 5 /tmp/dwl-stderr
 ```
 
-### Show dwl ouptut 
+## Show dwl ouptut 
 
 ```bash
-watch /tmp/dwl-stdout
+watch -n 1 tail -n 5 /tmp/dwl-stdout
 ```
 
 
@@ -66,6 +76,7 @@ watch /tmp/dwl-stdout
 
 [Extension](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)
 
+## My config 
 
 ```json
 {
