@@ -12,7 +12,7 @@ Linux is required
 
 ## II
 
-Install libnotify, pip, ffmpeg, on your system.
+Install libnotify, python3, pipx, ffmpeg, on your system.
 
 ## III
 
