@@ -1,0 +1,13 @@
+[package]
+name = "dwl-status"
+description = "Show dwl current status"
+keywords = ["status", "dwl", "spotify", "info"]
+version = "0.1.0"
+edition = "2021"
+repository = "https://github.com/otechdo/dwl/dwl"
+readme = "README.md"
+license-file = "LICENSE"
+authors = ["Willy Micieli"]
+categories = ["command-line-utilities"]
+
+[dependencies]

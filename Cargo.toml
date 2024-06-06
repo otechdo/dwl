@@ -1,0 +1,3 @@
+[workspace]
+members = ["dwl", "dwl-status"]
+resolver = "2"
