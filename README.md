@@ -20,7 +20,7 @@ Install python3, pipx, ffmpeg, on your system.
 pipx install spotdl 
 ```
 
-## IV 
+## IV
 
 ```bash
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
@@ -59,13 +59,13 @@ install -m 644 icons/dwl.svg /usr/share/icons
 dwl
 ```
 
->  Show dwl errors 
+>  Show dwl errors
 
 ```bash
 watch -n 1 tail -n 5 /tmp/dwl-stderr
 ```
 
-> Show dwl ouptut 
+> Show dwl ouptut
 
 ```bash
 watch -n 1 tail -n 5 /tmp/dwl-stdout
