@@ -2,11 +2,9 @@
 
 use indicatif::{ProgressBar, ProgressStyle};
 use inquire::{Confirm, Text};
-use std::{
-    fs::File,
-    process::Command,
-    time::Duration,
-};
+use std::cell::Cell;
+use std::thread::sleep;
+use std::{fs::File, process::Command, time::Duration};
 
 fn ask(p: &str) -> String {
     loop {
@@ -35,41 +33,80 @@ fn capture(p: &mut Vec<String>) {
 fn download(song: &str) -> i32 {
     let e: File = File::create("/tmp/dwl-stderr").expect("msg");
     let o: File = File::create("/tmp/dwl-stdout").expect("msg");
-    if let Ok(mut child) = Command::new("spotdl").arg("--config").arg(song).stdout(o).stderr(e).spawn() {
+    if let Ok(mut child) = Command::new("spotdl")
+        .arg("--config")
+        .arg(song)
+        .stdout(o)
+        .stderr(e)
+        .spawn()
+    {
         if let Ok(status) = child.wait() {
-           return  if status.success() {
-               0
-            }else{
-                1
-            };
+            return if status.success() { 0 } else { 1 };
         }
         return 1;
     }
     1
 }
 
+fn pause(pb: &ProgressBar) {
+    for x in 1..=60 {
+        let y = 60 - x;
+        pb.set_message(y.to_string());
+        sleep(Duration::from_secs(1));
+    }
+}
 fn main() {
     let mut musics: Vec<String> = Vec::new();
     capture(&mut musics);
     let pb: ProgressBar = ProgressBar::new(musics.len() as u64);
-    if let Ok(template) = ProgressStyle::with_template("{spinner:.white} [ {percent}% ] [{bar:80.white}] {msg}") {
+    if let Ok(template) =
+        ProgressStyle::with_template("{spinner:.white} [ {percent}% ] [{bar:80.white}] {msg}")
+    {
         pb.set_style(template.progress_chars("==-"));
     }
     pb.enable_steady_tick(Duration::from_millis(100));
-    let mut success : usize = 0;
-    let mut failures: usize = 0;
-    for music in &musics {
-        pb.set_message(format!("Start to download {music}"));
-        if download(music.as_str()).eq(&0) {
-            pb.set_message(format!("{music} has been successfully downloaded"));
-            success +=1;
+    let success: Cell<usize> = Cell::new(0);
+    let failure: Cell<usize> = Cell::new(0);
+    let size = musics.len();
+    for (id, query) in musics.into_iter().enumerate() {
+        pb.set_message(query.to_string());
+        if download(query.as_str()).eq(&0) {
+            pb.set_message(format!(
+                "Query #{id} {query} has been downloaded successfully"
+            ));
+            success.set(success.get() + 1);
             pb.inc(1);
-        }else {
-            pb.set_message(format!("{music} failed to download the query"));
-            failures +=1;
+            if pb.is_finished() {
+                break;
+            }
+            pause(&pb);
+        } else {
+            pb.set_message(format!("Query #{id} {query} has been failed"));
+            failure.set(failure.get() + 1);
+            if pb.is_finished() {
+                break;
+            }
+            for i in 1..=3 {
+                if pb.is_finished() {
+                    break;
+                }
+                pause(&pb);
+                pb.set_message(format!("Retry to download {query} retry id #{i}"));
+                if download(query.as_str()).eq(&0) {
+                    failure.set(failure.get() - 1);
+                    success.set(success.get()  + 1);
+                    pb.set_message(format!(
+                        "Successfully downloaded the {query} query at the #{i} retry",
+                    ));
+                    break;
+                }
+            }
             pb.inc(1);
-            continue;
         }
     }
-    pb.finish_with_message(format!("Success : {success}/{} Failure : {failures}/{}", musics.len(),musics.len()));
+    pb.finish_with_message(format!(
+        "Success : {}/{size} Failure : {}/{size}",
+        success.get(),
+        failure.get()
+    ));
 }
