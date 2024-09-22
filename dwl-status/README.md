@@ -1,6 +1,6 @@
-# Installation
+# Installation
 
-```shell
+```bash
 cargo install dwl-status
-``
+```
 
