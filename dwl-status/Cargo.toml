@@ -2,7 +2,7 @@
 name = "dwl-status"
 description = "Show dwl current status"
 keywords = ["status", "dwl", "spotify", "info"]
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 repository = "https://github.com/otechdo/dwl/tree/master/dwl-status"
 readme = "README.md"
